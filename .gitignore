@@ -1,0 +1,39 @@
+# PHP
+*.log
+*.cache
+
+# Database
+*.sql
+*.sqlite
+*.db
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+tmp/
+temp/
+cache/
+
+# Uploads (uncomment jika tidak ingin push file upload)
+# uploads/
+# images/uploads/
+
+# Vendor (jika pakai composer)
+vendor/
+
+# Node modules (jika ada)
+node_modules/

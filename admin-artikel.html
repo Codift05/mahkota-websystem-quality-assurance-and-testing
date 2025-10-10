@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Artikel</title>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+<body>
+  <header class="p-3 bg-primary text-white">
+    <div class="container">
+      <h1 class="h3">Manajemen Artikel</h1>
+    </div>
+  </header>
+  <main class="container my-4">
+    <div class="mb-3">
+      <a href="admin-artikel-form.html" class="btn btn-success">+ Tambah Artikel</a>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-bordered align-middle">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Judul</th>
+              <th>Kategori</th>
+              <th>Tanggal</th>
+              <th>Gambar</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data artikel akan di-generate dinamis oleh PHP -->
+            <tr>
+              <td>1</td>
+              <td>Judul Contoh</td>
+              <td>Bisnis</td>
+              <td>30 Sep 2025</td>
+              <td><img src="assets/img/portfolio/portfolio-8.webp" alt="Gambar" style="width:60px;height:auto;"></td>
+              <td>
+                <a href="admin-artikel-form.html?id=1" class="btn btn-warning btn-sm">Edit</a>
+                <a href="#" class="btn btn-danger btn-sm">Hapus</a>
+              </td>
+            </tr>
+            <!-- ... -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

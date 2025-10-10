@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Admin Panel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #f8f9fc;
+      --accent-color: #2e59d9;
+      --text-color: #5a5c69;
+      --light-text: #858796;
+      --dark-text: #3a3b45;
+      --success-color: #1cc88a;
+      --error-color: #e74a3b;
+    }
+    
+    body {
+      font-family: 'Nunito', 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .login-container {
+      display: flex;
+      max-width: 900px;
+      width: 100%;
+      background-color: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .login-image {
+      flex: 1;
+      background-image: url('assets/img/illustration/illustration-6.webp');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(78, 115, 223, 0.7);
+    }
+    
+    .login-image .logo-container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .login-image .logo-container img {
+      max-width: 150px;
+      margin-bottom: 20px;
+    }
+    
+    .login-image .logo-container h3 {
+      color: white;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .login-image .logo-container p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+    }
+    
+    .login-form {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .login-form h2 {
+      color: var(--dark-text);
+      font-weight: 700;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+    
+    .login-form p {
+      color: var(--light-text);
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--dark-text);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #e3e6f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+      outline: none;
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    .input-group .form-control {
+      padding-right: 45px;
+    }
+    
+    .input-group .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--light-text);
+      cursor: pointer;
+      z-index: 5;
+    }
+    
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background-color: var(--primary-color);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+    
+    .btn-login:hover {
+      background-color: var(--accent-color);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(78, 115, 223, 0.4);
+    }
+    
+    .login-footer {
+      margin-top: 30px;
+      text-align: center;
+      color: var(--light-text);
+      font-size: 0.9rem;
+    }
+    
+    .login-footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    #loginError {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+      display: none;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 768px) {
+      .login-container {
+        flex-direction: column;
+      }
+      
+      .login-image {
+        height: 200px;
+      }
+      
+      .login-form {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-image">
+      <div class="logo-container">
+        <img src="assets/img/logo.webp" alt="Logo">
+        <h3>Admin Panel</h3>
+        <p>Kelola konten website dengan mudah dan cepat</p>
+      </div>
+    </div>
+    <div class="login-form">
+      <h2>Selamat Datang</h2>
+      <p>Silakan masukkan kredensial Anda untuk mengakses panel admin</p>
+      
+      <form id="loginForm" action="#" method="post">
+        <div class="form-group">
+          <label for="username">Username atau Email</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="username" name="username" required placeholder="Masukkan username atau email">
+            <span class="input-icon"><i class="bi bi-person"></i></span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-group">
+            <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan password">
+            <button type="button" class="toggle-password" id="togglePassword">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn-login">
+          <span class="loading-spinner" id="loginSpinner"></span>
+          <span id="loginText">Login</span>
+        </button>
+        
+        <div id="loginError"></div>
+      </form>
+      
+      <div class="login-footer">
+        <p>&copy; 2023 Admin Panel. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const icon = this.querySelector('i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+      }
+    });
+    
+    // Form submission
+    const form = document.getElementById('loginForm');
+    const errorDiv = document.getElementById('loginError');
+    const loginSpinner = document.getElementById('loginSpinner');
+    const loginText = document.getElementById('loginText');
+    
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      errorDiv.style.display = 'none';
+      loginSpinner.style.display = 'inline-block';
+      loginText.textContent = 'Memproses...';
+      
+      const formData = new FormData(form);
+      
+      try {
+        const res = await fetch('login.php', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          loginText.textContent = 'Berhasil!';
+          window.location.href = 'admin-dashboard.php';
+        } else {
+          loginSpinner.style.display = 'none';
+          loginText.textContent = 'Login';
+          errorDiv.textContent = data.error || 'Username atau password salah. Silakan coba lagi.';
+          errorDiv.style.display = 'block';
+        }
+      } catch (err) {
+        loginSpinner.style.display = 'none';
+        loginText.textContent = 'Login';
+        errorDiv.textContent = 'Terjadi kesalahan koneksi. Silakan coba lagi nanti.';
+        errorDiv.style.display = 'block';
+      }
+    });
+    
+    // Simple animation on load
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginContainer = document.querySelector('.login-container');
+      loginContainer.style.opacity = '0';
+      loginContainer.style.transform = 'translateY(20px)';
+      loginContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      
+      setTimeout(() => {
+        loginContainer.style.opacity = '1';
+        loginContainer.style.transform = 'translateY(0)';
+      }, 200);
+    });
+  </script>
+</body>
+</html>
