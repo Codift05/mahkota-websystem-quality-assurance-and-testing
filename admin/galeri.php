@@ -44,10 +44,12 @@ if (isset($_POST['tambah'])) {
                 $message = "Galeri berhasil ditambahkan";
                 
                 // Log aktivitas
-                $admin_id = $_SESSION['admin_id'];
-                $log_sql = "INSERT INTO log_aktivitas (admin_id, aktivitas, tanggal) 
-                           VALUES ('$admin_id', 'Menambahkan galeri: $judul', '$tanggal_upload')";
-                $conn->query($log_sql);
+                if (isset($_SESSION['user_id'])) {
+                    $admin_id = $_SESSION['user_id'];
+                    $log_sql = "INSERT INTO log_aktivitas (admin_id, aktivitas, tanggal) 
+                               VALUES ('$admin_id', 'Menambahkan galeri: $judul', '$tanggal_upload')";
+                    $conn->query($log_sql);
+                }
             } else {
                 $error = "Error: " . $sql . "<br>" . $conn->error;
             }
@@ -82,11 +84,13 @@ if (isset($_GET['hapus'])) {
             $message = "Galeri berhasil dihapus";
             
             // Log aktivitas
-            $admin_id = $_SESSION['admin_id'];
-            $tanggal = date('Y-m-d H:i:s');
-            $log_sql = "INSERT INTO log_aktivitas (admin_id, aktivitas, tanggal) 
-                       VALUES ('$admin_id', 'Menghapus galeri: {$file_data['judul']}', '$tanggal')";
-            $conn->query($log_sql);
+            if (isset($_SESSION['user_id'])) {
+                $admin_id = $_SESSION['user_id'];
+                $tanggal = date('Y-m-d H:i:s');
+                $log_sql = "INSERT INTO log_aktivitas (admin_id, aktivitas, tanggal) 
+                           VALUES ('$admin_id', 'Menghapus galeri: {$file_data['judul']}', '$tanggal')";
+                $conn->query($log_sql);
+            }
         } else {
             $error = "Error: " . $sql . "<br>" . $conn->error;
         }
