@@ -45,7 +45,42 @@ if ($conn->query($sql_logs)) {
     $errors[] = "❌ Error membuat tabel admin_logs: " . $conn->error;
 }
 
-// 3. Cek apakah sudah ada admin
+// 3. Buat tabel log_aktivitas jika belum ada
+$sql_log_aktivitas = "CREATE TABLE IF NOT EXISTS `log_aktivitas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL,
+  `aktivitas` text NOT NULL,
+  `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `admin_id` (`admin_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
+if ($conn->query($sql_log_aktivitas)) {
+    $success[] = "✅ Tabel 'log_aktivitas' berhasil dibuat/sudah ada";
+} else {
+    $errors[] = "❌ Error membuat tabel log_aktivitas: " . $conn->error;
+}
+
+// 4. Buat tabel galeri jika belum ada
+$sql_galeri = "CREATE TABLE IF NOT EXISTS `galeri` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `judul` varchar(255) NOT NULL,
+  `deskripsi` text,
+  `kategori` varchar(100) DEFAULT 'Lainnya',
+  `file_path` varchar(500) NOT NULL,
+  `tanggal_upload` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `kategori` (`kategori`),
+  KEY `tanggal_upload` (`tanggal_upload`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
+if ($conn->query($sql_galeri)) {
+    $success[] = "✅ Tabel 'galeri' berhasil dibuat/sudah ada";
+} else {
+    $errors[] = "❌ Error membuat tabel galeri: " . $conn->error;
+}
+
+// 5. Cek apakah sudah ada admin
 $check = $conn->query("SELECT COUNT(*) as total FROM admin");
 $row = $check->fetch_assoc();
 
