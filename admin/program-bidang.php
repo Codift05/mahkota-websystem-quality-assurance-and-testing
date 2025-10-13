@@ -24,18 +24,10 @@ function logActivity($conn, $user_id, $activity) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Program Bidang - Admin Panel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <style>
-        .program-card {
-            transition: transform 0.3s;
-        }
-        .program-card:hover {
-            transform: translateY(-5px);
-        }
-    </style>
+    <title>Manajemen Program Bidang - Admin Dashboard</title>
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/css/admin.css" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
@@ -45,11 +37,13 @@ function logActivity($conn, $user_id, $activity) {
             
             <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                <h1 class="h2 mb-4">Manajemen Program Bidang</h1>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Manajemen Program Bidang</h1>
+                </div>
                 
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h5 class="card-title">Tambah Program Bidang Baru</h5>
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Program Bidang Baru
                     </div>
                     <div class="card-body">
                         <form id="programForm" enctype="multipart/form-data">
@@ -81,19 +75,23 @@ function logActivity($conn, $user_id, $activity) {
                                     <option value="nonaktif">Nonaktif</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">Simpan Program</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Simpan Program
+                            </button>
                         </form>
                     </div>
                 </div>
                 
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">Daftar Program Bidang</h5>
+                        <div>
+                            <i class="bi bi-list-ul me-1"></i> Daftar Program Bidang
+                        </div>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnViewCards">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnViewCards" title="Tampilan Card">
                                 <i class="bi bi-grid"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary active" id="btnViewTable">
+                            <button type="button" class="btn btn-sm btn-outline-secondary active" id="btnViewTable" title="Tampilan Tabel">
                                 <i class="bi bi-list"></i>
                             </button>
                         </div>
@@ -101,21 +99,23 @@ function logActivity($conn, $user_id, $activity) {
                     <div class="card-body">
                         <!-- Table View (Default) -->
                         <div id="tableView">
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Program</th>
-                                        <th>Icon</th>
-                                        <th>Status</th>
-                                        <th>Urutan</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="programTableBody">
-                                    <!-- Data will be loaded here -->
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Program</th>
+                                            <th>Icon</th>
+                                            <th>Status</th>
+                                            <th>Urutan</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="programTableBody">
+                                        <!-- Data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         
                         <!-- Card View (Alternative) -->
@@ -177,7 +177,7 @@ function logActivity($conn, $user_id, $activity) {
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Load program data
@@ -271,6 +271,11 @@ function logActivity($conn, $user_id, $activity) {
             const tableBody = document.getElementById('programTableBody');
             tableBody.innerHTML = '';
             
+            if (programs.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Belum ada data program bidang</td></tr>';
+                return;
+            }
+            
             programs.forEach((program, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -284,11 +289,11 @@ function logActivity($conn, $user_id, $activity) {
                     </td>
                     <td>${program.urutan}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" onclick="editProgram(${program.id})">
-                            <i class="bi bi-pencil"></i>
+                        <button class="btn btn-sm btn-warning" onclick="editProgram(${program.id})" title="Edit">
+                            <i class="bi bi-pencil"></i> Edit
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteProgram(${program.id})">
-                            <i class="bi bi-trash"></i>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProgram(${program.id})" title="Hapus">
+                            <i class="bi bi-trash"></i> Hapus
                         </button>
                     </td>
                 `;
@@ -300,6 +305,11 @@ function logActivity($conn, $user_id, $activity) {
         function renderCardView(programs) {
             const cardContainer = document.getElementById('cardView');
             cardContainer.innerHTML = '';
+            
+            if (programs.length === 0) {
+                cardContainer.innerHTML = '<div class="col-12 text-center py-5"><p class="text-muted">Belum ada data program bidang</p></div>';
+                return;
+            }
             
             programs.forEach(program => {
                 const card = document.createElement('div');
@@ -320,7 +330,7 @@ function logActivity($conn, $user_id, $activity) {
                             </div>
                         </div>
                         <div class="card-footer bg-transparent border-0 text-center">
-                            <button class="btn btn-sm btn-primary" onclick="editProgram(${program.id})">
+                            <button class="btn btn-sm btn-warning" onclick="editProgram(${program.id})">
                                 <i class="bi bi-pencil"></i> Edit
                             </button>
                             <button class="btn btn-sm btn-danger" onclick="deleteProgram(${program.id})">

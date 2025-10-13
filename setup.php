@@ -80,7 +80,30 @@ if ($conn->query($sql_galeri)) {
     $errors[] = "❌ Error membuat tabel galeri: " . $conn->error;
 }
 
-// 5. Cek apakah sudah ada admin
+// 5. Buat tabel program_kerja jika belum ada
+$sql_program = "CREATE TABLE IF NOT EXISTS `program_kerja` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_program` varchar(255) NOT NULL,
+  `deskripsi` text,
+  `divisi` varchar(100) NOT NULL,
+  `tahun` varchar(4) NOT NULL,
+  `icon` varchar(50) DEFAULT 'bi-calendar-check',
+  `status` varchar(50) DEFAULT 'Aktif',
+  `urutan` int(11) DEFAULT 1,
+  `tanggal_dibuat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `divisi` (`divisi`),
+  KEY `tahun` (`tahun`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
+if ($conn->query($sql_program)) {
+    $success[] = "✅ Tabel 'program_kerja' berhasil dibuat/sudah ada";
+} else {
+    $errors[] = "❌ Error membuat tabel program_kerja: " . $conn->error;
+}
+
+// 6. Cek apakah sudah ada admin
 $check = $conn->query("SELECT COUNT(*) as total FROM admin");
 $row = $check->fetch_assoc();
 
