@@ -25,91 +25,176 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
       --dark-text: #3a3b45;
       --success-color: #1cc88a;
       --error-color: #e74a3b;
+      --sidebar-bg: #e8f4f8;
+      --sidebar-blue: #4e73df;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
     
     body {
       font-family: 'Nunito', 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+      background: #fff;
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
       margin: 0;
-      padding: 20px;
     }
     
     .login-container {
       display: flex;
-      max-width: 900px;
       width: 100%;
-      background-color: #fff;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      min-height: 100vh;
     }
     
-    .login-image {
-      flex: 1;
-      background-image: url('assets/img/illustration/illustration-6.webp');
-      background-size: cover;
-      background-position: center;
+    .login-sidebar {
+      width: 420px;
+      background-color: var(--sidebar-bg);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
       position: relative;
+    }
+    
+    .sidebar-header {
+      margin-bottom: 40px;
+    }
+    
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark-text);
+      margin-bottom: 15px;
+    }
+    
+    .sidebar-description {
+      color: var(--text-color);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    
+    .sidebar-features {
+      flex: 1;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 25px;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      transition: all 0.3s;
+    }
+    
+    .feature-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      width: 45px;
+      height: 45px;
+      background: var(--sidebar-blue);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-right: 15px;
+      flex-shrink: 0;
     }
     
-    .login-image::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(78, 115, 223, 0.7);
-    }
-    
-    .login-image .logo-container {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 20px;
-    }
-    
-    .login-image .logo-container img {
-      max-width: 150px;
-      margin-bottom: 20px;
-    }
-    
-    .login-image .logo-container h3 {
+    .feature-icon i {
       color: white;
-      font-weight: 700;
-      margin-bottom: 10px;
+      font-size: 1.2rem;
     }
     
-    .login-image .logo-container p {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 0.9rem;
+    .feature-content h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark-text);
+      margin-bottom: 5px;
+    }
+    
+    .feature-content p {
+      font-size: 0.85rem;
+      color: var(--light-text);
+      margin: 0;
+    }
+    
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid #d1e7f0;
+    }
+    
+    .sidebar-footer p {
+      font-size: 0.85rem;
+      color: var(--light-text);
+      margin: 0;
     }
     
     .login-form {
       flex: 1;
-      padding: 40px;
+      padding: 60px 80px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      background: white;
+    }
+    
+    .form-header {
+      margin-bottom: 40px;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    
+    .back-link i {
+      margin-right: 5px;
+    }
+    
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo-section img {
+      max-width: 120px;
+      height: auto;
+      margin-bottom: 15px;
     }
     
     .login-form h2 {
       color: var(--dark-text);
       font-weight: 700;
       margin-bottom: 10px;
-      font-size: 2rem;
+      font-size: 1.8rem;
     }
     
-    .login-form p {
+    .login-form .welcome-text {
       color: var(--light-text);
-      margin-bottom: 30px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+    
+    .login-form .highlight {
+      color: var(--primary-color);
+      font-weight: 700;
     }
     
     .form-group {
@@ -223,64 +308,162 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
       to { transform: rotate(360deg); }
     }
     
-    @media (max-width: 768px) {
-      .login-container {
-        flex-direction: column;
-      }
-      
-      .login-image {
-        height: 200px;
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    
+    .checkbox-wrapper label {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+    
+    .checkbox-wrapper input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    
+    .forgot-password {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 992px) {
+      .login-sidebar {
+        display: none;
       }
       
       .login-form {
+        padding: 40px 30px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .login-form {
         padding: 30px 20px;
+      }
+      
+      .login-form h2 {
+        font-size: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <div class="login-image">
-      <div class="logo-container">
-        <img src="assets/img/logo.webp" alt="Logo">
-        <h3>Admin Panel</h3>
-        <p>Kelola konten website dengan mudah dan cepat</p>
+    <!-- Sidebar Kiri -->
+    <div class="login-sidebar">
+      <div class="sidebar-header">
+        <h2>Single Sign On</h2>
+        <p class="sidebar-description">
+          Hi Digiers, Selarang Akun-Mu Dapat Digunakan Untuk Berbagai Platform. 
+          Nikmati Berbagai Kemudahan Akses Platform Dalam Satu Akun.
+        </p>
       </div>
-    </div>
-    <div class="login-form">
-      <h2>Selamat Datang</h2>
-      <p>Silakan masukkan kredensial Anda untuk mengakses panel admin</p>
       
-      <form id="loginForm" action="#" method="post">
-        <div class="form-group">
-          <label for="username">Username atau Email</label>
-          <div class="input-group">
-            <input type="text" class="form-control" id="username" name="username" required placeholder="Masukkan username atau email">
-            <span class="input-icon"><i class="bi bi-person"></i></span>
+      <div class="sidebar-features">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="bi bi-newspaper"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Manajemen Artikel</h4>
+            <p>Platform untuk mengelola artikel dan berita organisasi</p>
           </div>
         </div>
         
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="bi bi-images"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Galeri Media</h4>
+            <p>Kelola galeri foto dan dokumentasi kegiatan</p>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Program Kerja</h4>
+            <p>Atur dan pantau program kerja organisasi</p>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">
+            <i class="bi bi-gear"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Pengaturan Website</h4>
+            <p>Konfigurasi dan kelola pengaturan website</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <p>&copy; 2025 MAHKOTA Manado. All rights reserved.</p>
+      </div>
+    </div>
+    
+    <!-- Form Login Kanan -->
+    <div class="login-form">
+      <div class="form-header">
+        <a href="index.html" class="back-link">
+          <i class="bi bi-arrow-left"></i> Beranda
+        </a>
+        
+        <div class="logo-section">
+          <img src="assets/img/about/LOGO MAHKOTA (1) (1).png" alt="Logo MAHKOTA">
+        </div>
+        
+        <h2>Log In Akun</h2>
+        <p class="welcome-text">Hi, Selamat Datang <span class="highlight">#AdminMAHKOTA</span></p>
+      </div>
+      
+      <form id="loginForm" action="#" method="post">
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="username">Email / No Handphone <span style="color: red;">*</span></label>
+          <input type="text" class="form-control" id="username" name="username" required placeholder="Email">
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password <span style="color: red;">*</span></label>
           <div class="input-group">
-            <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan password">
+            <input type="password" class="form-control" id="password" name="password" required placeholder="**********">
             <button type="button" class="toggle-password" id="togglePassword">
               <i class="bi bi-eye"></i>
             </button>
           </div>
         </div>
         
+        <div class="checkbox-wrapper">
+          <label>
+            <input type="checkbox" name="remember" id="remember">
+            Ingat Saya
+          </label>
+          <a href="#" class="forgot-password">Lupa Password</a>
+        </div>
+        
         <button type="submit" class="btn-login">
           <span class="loading-spinner" id="loginSpinner"></span>
-          <span id="loginText">Login</span>
+          <span id="loginText">LOGIN</span>
         </button>
         
         <div id="loginError"></div>
       </form>
-      
-      <div class="login-footer">
-        <p>&copy; 2025 Mahkota-Manado. All rights reserved.</p>
-      </div>
     </div>
   </div>
   
