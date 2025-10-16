@@ -22,6 +22,12 @@
                     Manajemen Galeri
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'program-kerja.php' || basename($_SERVER['PHP_SELF']) == 'edit_program.php' ? 'active' : ''; ?>" href="program-kerja.php">
+                    <i class="bi bi-calendar-check me-2"></i>
+                    Program Kerja
+                </a>
+            </li>
         </ul>
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
