@@ -44,10 +44,12 @@ if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
     $filename = uniqid('galeri_', true) . '.' . $ext;
     $target = $uploads_dir . '/' . $filename;
     
-    if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
+    $moved = move_uploaded_file($_FILES['gambar']['tmp_name'], $target);
+    if (!$moved && is_file($_FILES['gambar']['tmp_name'])) {
+        $moved = copy($_FILES['gambar']['tmp_name'], $target);
+    }
+    if ($moved) {
         $gambar = 'uploads/galeri/' . $filename;
-        
-        // Hapus gambar lama
         $old = $conn->query("SELECT gambar FROM galeri WHERE id = $id");
         if ($old_row = $old->fetch_assoc()) {
             $old_file = dirname(dirname(__DIR__)) . '/' . $old_row['gambar'];

@@ -6,18 +6,32 @@ require_once 'db.php';
 $check_column = $conn->query("SHOW COLUMNS FROM galeri LIKE 'kategori'");
 $has_kategori = ($check_column && $check_column->num_rows > 0);
 
+// Tentukan nama kolom tanggal yang tersedia (fallback antara tanggal_upload vs tanggal)
+$orderColumn = 'tanggal_upload';
+$colCheckTanggalUpload = $conn->query("SHOW COLUMNS FROM galeri LIKE 'tanggal_upload'");
+if (!$colCheckTanggalUpload || $colCheckTanggalUpload->num_rows === 0) {
+  $orderColumn = 'tanggal';
+}
+
+// Tentukan nama kolom file path yang tersedia (fallback antara file_path vs gambar)
+$fileColumn = 'file_path';
+$colCheckFilePath = $conn->query("SHOW COLUMNS FROM galeri LIKE 'file_path'");
+if (!$colCheckFilePath || $colCheckFilePath->num_rows === 0) {
+  $fileColumn = 'gambar';
+}
+
 // Ambil kategori dari parameter URL jika ada
 $kategori_filter = isset($_GET['kategori']) ? $_GET['kategori'] : '';
 
 // Query untuk mengambil data galeri
 if ($has_kategori && $kategori_filter) {
-    $sql = "SELECT * FROM galeri WHERE kategori = ? ORDER BY tanggal_upload DESC";
+    $sql = "SELECT * FROM galeri WHERE kategori = ? ORDER BY $orderColumn DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $kategori_filter);
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $sql = "SELECT * FROM galeri ORDER BY tanggal_upload DESC";
+    $sql = "SELECT * FROM galeri ORDER BY $orderColumn DESC";
     $result = $conn->query($sql);
 }
 
@@ -270,8 +284,8 @@ if ($has_kategori) {
               ?>
               <div class="col-lg-4 col-md-6">
                 <div class="gallery-item">
-                  <a href="<?php echo htmlspecialchars($row['file_path']); ?>" class="glightbox">
-                    <img src="<?php echo htmlspecialchars($row['file_path']); ?>" alt="<?php echo htmlspecialchars($row['judul']); ?>">
+                  <a href="<?php echo htmlspecialchars($row[$fileColumn]); ?>" class="glightbox">
+                    <img src="<?php echo htmlspecialchars($row[$fileColumn]); ?>" alt="<?php echo htmlspecialchars($row['judul']); ?>">
                   </a>
                   <div class="gallery-overlay">
                     <h4><?php echo htmlspecialchars($row['judul']); ?></h4>
@@ -280,7 +294,7 @@ if ($has_kategori) {
                     <span class="gallery-badge"><?php echo htmlspecialchars($row['kategori']); ?></span>
                     <?php endif; ?>
                     <p style="font-size: 0.8rem; margin-top: 10px;">
-                      <i class="bi bi-calendar"></i> <?php echo date('d M Y', strtotime($row['tanggal_upload'])); ?>
+                      <i class="bi bi-calendar"></i> <?php echo date('d M Y', strtotime($row[$orderColumn])); ?>
                     </p>
                   </div>
                 </div>

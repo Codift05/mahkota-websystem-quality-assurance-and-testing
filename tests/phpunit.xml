@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         bootstrap="bootstrap.php"
+         colors="true"
+         verbose="true"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="API Tests">
+            <directory>api</directory>
+        </testsuite>
+        <testsuite name="Integration Tests">
+            <directory>integration</directory>
+        </testsuite>
+    </testsuites>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">../api</directory>
+        </include>
+        <exclude>
+            <directory>../vendor</directory>
+        </exclude>
+    </coverage>
+    <php>
+        <env name="DB_HOST" value="localhost"/>
+        <env name="DB_USER" value="root"/>
+        <env name="DB_PASS" value=""/>
+        <env name="DB_NAME" value="mahkota_test"/>
+    </php>
+</phpunit>

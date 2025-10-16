@@ -43,7 +43,11 @@ if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
     $filename = uniqid('galeri_', true) . '.' . $ext;
     $target = $uploads_dir . '/' . $filename;
     
-    if (move_uploaded_file($_FILES['gambar']['tmp_name'], $target)) {
+    $moved = move_uploaded_file($_FILES['gambar']['tmp_name'], $target);
+    if (!$moved && is_file($_FILES['gambar']['tmp_name'])) {
+        $moved = copy($_FILES['gambar']['tmp_name'], $target);
+    }
+    if ($moved) {
         $gambar = 'uploads/galeri/' . $filename;
     } else {
         echo json_encode(['error' => 'Gagal upload gambar']);
@@ -54,7 +58,22 @@ if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
     exit;
 }
 
-$stmt = $conn->prepare('INSERT INTO galeri (judul, deskripsi, kategori, gambar, tanggal) VALUES (?, ?, ?, ?, NOW())');
+// Tentukan nama kolom sesuai struktur tabel yang tersedia (fallback)
+$colGambar = 'gambar';
+$colTanggal = 'tanggal';
+
+$checkGambar = $conn->query("SHOW COLUMNS FROM galeri LIKE 'gambar'");
+if (!$checkGambar || $checkGambar->num_rows === 0) {
+    $colGambar = 'file_path';
+}
+
+$checkTanggal = $conn->query("SHOW COLUMNS FROM galeri LIKE 'tanggal'");
+if (!$checkTanggal || $checkTanggal->num_rows === 0) {
+    $colTanggal = 'tanggal_upload';
+}
+
+$sql = "INSERT INTO galeri (judul, deskripsi, kategori, $colGambar, $colTanggal) VALUES (?, ?, ?, ?, NOW())";
+$stmt = $conn->prepare($sql);
 $stmt->bind_param('ssss', $judul, $deskripsi, $kategori, $gambar);
 
 if ($stmt->execute()) {

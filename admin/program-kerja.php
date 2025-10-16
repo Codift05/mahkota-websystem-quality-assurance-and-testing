@@ -33,14 +33,43 @@ if (isset($_POST['tambah'])) {
     if ($stmt->execute()) {
         $message = "Program kerja berhasil ditambahkan";
         
-        // Log aktivitas
-        $admin_id = $_SESSION['admin_id'];
-        $log_sql = "INSERT INTO log_aktivitas (admin_id, aktivitas, tanggal) 
-                   VALUES (?, ?, ?)";
-        $log_stmt = $conn->prepare($log_sql);
-        $aktivitas = "Menambahkan program kerja: $nama_program";
-        $log_stmt->bind_param('iss', $admin_id, $aktivitas, $tanggal_dibuat);
-        $log_stmt->execute();
+        // Log aktivitas (fleksibel terhadap variasi skema)
+        $admin_id = $_SESSION['user_id'] ?? ($_SESSION['admin_id'] ?? null);
+        if ($admin_id) {
+            $aktivitas_text = "Menambahkan program kerja: $nama_program";
+
+            // Deteksi keberadaan tabel log_aktivitas
+            $tblRes = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'log_aktivitas'");
+            if ($tblRes && $tblRes->num_rows > 0) {
+                // Ambil kolom yang tersedia
+                $cols = [];
+                $colRes = $conn->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'log_aktivitas'");
+                if ($colRes) { while($r = $colRes->fetch_assoc()) { $cols[] = $r['COLUMN_NAME']; } }
+
+                if (in_array('admin_id', $cols) && in_array('aktivitas', $cols) && in_array('tanggal', $cols)) {
+                    $stmtLog = $conn->prepare("INSERT INTO log_aktivitas (admin_id, aktivitas, tanggal) VALUES (?, ?, ?)");
+                    $stmtLog->bind_param('iss', $admin_id, $aktivitas_text, $tanggal_dibuat);
+                    $stmtLog->execute();
+                    $stmtLog->close();
+                } else if (in_array('user_id', $cols) && in_array('action', $cols)) {
+                    $stmtLog = $conn->prepare("INSERT INTO log_aktivitas (user_id, action, detail, created_at) VALUES (?, ?, ?, NOW())");
+                    $action = 'program_create';
+                    $detail = $aktivitas_text;
+                    $stmtLog->bind_param('iss', $admin_id, $action, $detail);
+                    $stmtLog->execute();
+                    $stmtLog->close();
+                }
+            } else {
+                // Fallback ke admin_logs jika tersedia
+                $tblRes2 = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'admin_logs'");
+                if ($tblRes2 && $tblRes2->num_rows > 0) {
+                    $stmtLog = $conn->prepare("INSERT INTO admin_logs (user_id, activity, log_time) VALUES (?, ?, NOW())");
+                    $stmtLog->bind_param('is', $admin_id, $aktivitas_text);
+                    $stmtLog->execute();
+                    $stmtLog->close();
+                }
+            }
+        }
     } else {
         $error = "Error: " . $stmt->error;
     }
@@ -68,15 +97,41 @@ if (isset($_GET['hapus'])) {
         if ($stmt->execute()) {
             $message = "Program kerja berhasil dihapus";
             
-            // Log aktivitas
-            $admin_id = $_SESSION['admin_id'];
-            $tanggal = date('Y-m-d H:i:s');
-            $log_sql = "INSERT INTO log_aktivitas (admin_id, aktivitas, tanggal) 
-                       VALUES (?, ?, ?)";
-            $log_stmt = $conn->prepare($log_sql);
-            $aktivitas = "Menghapus program kerja: {$info_data['nama_program']}";
-            $log_stmt->bind_param('iss', $admin_id, $aktivitas, $tanggal);
-            $log_stmt->execute();
+            // Log aktivitas (fleksibel terhadap variasi skema)
+            $admin_id = $_SESSION['user_id'] ?? ($_SESSION['admin_id'] ?? null);
+            if ($admin_id) {
+                $tanggal = date('Y-m-d H:i:s');
+                $aktivitas_text = "Menghapus program kerja: {$info_data['nama_program']}";
+                
+                $tblRes = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'log_aktivitas'");
+                if ($tblRes && $tblRes->num_rows > 0) {
+                    $cols = [];
+                    $colRes = $conn->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'log_aktivitas'");
+                    if ($colRes) { while($r = $colRes->fetch_assoc()) { $cols[] = $r['COLUMN_NAME']; } }
+
+                    if (in_array('admin_id', $cols) && in_array('aktivitas', $cols) && in_array('tanggal', $cols)) {
+                        $stmtLog = $conn->prepare("INSERT INTO log_aktivitas (admin_id, aktivitas, tanggal) VALUES (?, ?, ?)");
+                        $stmtLog->bind_param('iss', $admin_id, $aktivitas_text, $tanggal);
+                        $stmtLog->execute();
+                        $stmtLog->close();
+                    } else if (in_array('user_id', $cols) && in_array('action', $cols)) {
+                        $stmtLog = $conn->prepare("INSERT INTO log_aktivitas (user_id, action, detail, created_at) VALUES (?, ?, ?, NOW())");
+                        $action = 'program_delete';
+                        $detail = $aktivitas_text;
+                        $stmtLog->bind_param('iss', $admin_id, $action, $detail);
+                        $stmtLog->execute();
+                        $stmtLog->close();
+                    }
+                } else {
+                    $tblRes2 = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'admin_logs'");
+                    if ($tblRes2 && $tblRes2->num_rows > 0) {
+                        $stmtLog = $conn->prepare("INSERT INTO admin_logs (user_id, activity, log_time) VALUES (?, ?, NOW())");
+                        $stmtLog->bind_param('is', $admin_id, $aktivitas_text);
+                        $stmtLog->execute();
+                        $stmtLog->close();
+                    }
+                }
+            }
         } else {
             $error = "Error: " . $stmt->error;
         }
@@ -140,13 +195,10 @@ $result = $conn->query($sql);
                                     <label for="divisi" class="form-label">Divisi</label>
                                     <select class="form-select" id="divisi" name="divisi" required>
                                         <option value="">Pilih Divisi</option>
-                                        <option value="Pendidikan">Pendidikan</option>
-                                        <option value="Sosial">Sosial</option>
-                                        <option value="Budaya">Budaya</option>
-                                        <option value="Olahraga">Olahraga</option>
-                                        <option value="Kewirausahaan">Kewirausahaan</option>
-                                        <option value="Media & Informasi">Media & Informasi</option>
-                                        <option value="Hubungan Masyarakat">Hubungan Masyarakat</option>
+                                        <option value="Komunikasi dan Informasi (KOMINFO)">Komunikasi dan Informasi (KOMINFO)</option>
+                                        <option value="Pengembangan Sumber Daya Manusia (PSDM)">Pengembangan Sumber Daya Manusia (PSDM)</option>
+                                        <option value="Perguruan Tinggi, Kemahasiswaan dan Pemuda (PTKP)">Perguruan Tinggi, Kemahasiswaan dan Pemuda (PTKP)</option>
+                                        <option value="Event dan Budaya">Event dan Budaya</option>
                                         <option value="Lainnya">Lainnya</option>
                                     </select>
                                 </div>

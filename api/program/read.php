@@ -9,6 +9,13 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
 header('Content-Type: application/json');
 require_once '../../db.php';
 
+$tableCheck = $conn->query("SHOW TABLES LIKE 'program'");
+if (!$tableCheck || $tableCheck->num_rows === 0) {
+    echo json_encode([]);
+    $conn->close();
+    exit;
+}
+
 $bidang = $_GET['bidang'] ?? '';
 $status = $_GET['status'] ?? '';
 
@@ -40,8 +47,10 @@ if ($params) {
 }
 
 $programs = [];
-while ($row = $result->fetch_assoc()) {
-    $programs[] = $row;
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $programs[] = $row;
+    }
 }
 
 echo json_encode($programs);
