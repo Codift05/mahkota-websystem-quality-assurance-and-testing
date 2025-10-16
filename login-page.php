@@ -364,10 +364,8 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     <!-- Sidebar Kiri -->
     <div class="login-sidebar">
       <div class="sidebar-header">
-        <h2>Single Sign On</h2>
+        <h2>Login Admin</h2>
         <p class="sidebar-description">
-          Hi Digiers, Selarang Akun-Mu Dapat Digunakan Untuk Berbagai Platform. 
-          Nikmati Berbagai Kemudahan Akses Platform Dalam Satu Akun.
         </p>
       </div>
       
