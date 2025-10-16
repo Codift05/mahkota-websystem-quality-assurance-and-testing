@@ -7,7 +7,7 @@ $dashboard_path = $is_in_admin_folder ? '../admin-dashboard.php' : 'admin-dashbo
 $logout_path = $is_in_admin_folder ? '../logout.php' : 'logout.php';
 $logo_path = $is_in_admin_folder ? '../assets/img/about/LOGO MAHKOTA (1) (1).png' : 'assets/img/about/LOGO MAHKOTA (1) (1).png';
 ?>
-<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse" style="background: linear-gradient(180deg, #4e73df 0%, #2e59d9 100%); position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000;">
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse" style="background: linear-gradient(180deg, #5c99ee 0%, #4a7bc8 100%); position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000;">
     <div class="position-sticky pt-3">
         <!-- Logo dan Brand -->
         <a href="<?php echo $dashboard_path; ?>" class="sidebar-brand text-decoration-none d-flex flex-column align-items-center justify-content-center mb-3" style="padding: 1.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">

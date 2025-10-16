@@ -3,31 +3,50 @@
    =================================== */
 
 :root {
-  --primary: #4e73df;
-  --primary-dark: #2e59d9;
-  --primary-light: #6f8ff7;
+  /* Main Theme Colors - Matching main.css */
+  --primary: #5c99ee;
+  --primary-dark: #4a7bc8;
+  --primary-light: #7db3f5;
+  --accent-color: #5c99ee;
+  --heading-color: #344761;
+  --default-color: #535d6b;
+  
+  /* Status Colors */
   --secondary: #858796;
   --success: #1cc88a;
   --info: #36b9cc;
   --warning: #f6c23e;
   --danger: #e74a3b;
-  --light: #f8f9fc;
-  --dark: #5a5c69;
+  
+  /* Background Colors */
+  --light: #f8fbff;
+  --dark: #344761;
   --white: #ffffff;
-  --gray-100: #f8f9fc;
+  --background-color: #ffffff;
+  --surface-color: #ffffff;
+  
+  /* Gray Scale */
+  --gray-100: #f8fbff;
   --gray-200: #eaecf4;
   --gray-300: #dddfeb;
   --gray-400: #d1d3e2;
   --gray-500: #b7b9cc;
   --gray-600: #858796;
   --gray-700: #6e707e;
-  --gray-800: #5a5c69;
-  --gray-900: #3a3b45;
+  --gray-800: #535d6b;
+  --gray-900: #344761;
+  
+  /* Layout */
   --sidebar-width: 260px;
   --topbar-height: 70px;
   --border-radius: 12px;
-  --box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-  --box-shadow-hover: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
+  --box-shadow: 0 0.15rem 1.75rem 0 rgba(52, 71, 97, 0.15);
+  --box-shadow-hover: 0 0.5rem 2rem 0 rgba(52, 71, 97, 0.2);
+  
+  /* Fonts - Matching main.css */
+  --default-font: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --heading-font: "Questrial", sans-serif;
+  --nav-font: "Open Sans", sans-serif;
 }
 
 * {
@@ -37,11 +56,11 @@
 }
 
 body {
-  font-family: 'Nunito', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--default-font);
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: var(--gray-800);
+  color: var(--default-color);
   background-color: var(--gray-100);
 }
 

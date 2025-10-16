@@ -17,16 +17,22 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
   <link rel="stylesheet" href="assets/css/main.css">
   <style>
     :root {
-      --primary-color: #4e73df;
-      --secondary-color: #f8f9fc;
-      --accent-color: #2e59d9;
-      --text-color: #5a5c69;
+      /* Matching main.css color scheme */
+      --primary-color: #5c99ee;
+      --secondary-color: #f8fbff;
+      --accent-color: #4a7bc8;
+      --text-color: #535d6b;
       --light-text: #858796;
-      --dark-text: #3a3b45;
+      --dark-text: #344761;
+      --heading-color: #344761;
       --success-color: #1cc88a;
       --error-color: #e74a3b;
-      --sidebar-bg: #e8f4f8;
-      --sidebar-blue: #4e73df;
+      --sidebar-bg: #f8fbff;
+      --sidebar-blue: #5c99ee;
+      
+      /* Fonts matching main.css */
+      --default-font: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --heading-font: "Questrial", sans-serif;
     }
     
     * {
@@ -36,7 +42,7 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     }
     
     body {
-      font-family: 'Nunito', 'Segoe UI', Roboto, sans-serif;
+      font-family: var(--default-font);
       background: #fff;
       min-height: 100vh;
       display: flex;
@@ -65,7 +71,8 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     .sidebar-header h2 {
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--dark-text);
+      color: var(--heading-color);
+      font-family: var(--heading-font);
       margin-bottom: 15px;
     }
     
@@ -115,7 +122,8 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     .feature-content h4 {
       font-size: 1rem;
       font-weight: 700;
-      color: var(--dark-text);
+      color: var(--heading-color);
+      font-family: var(--heading-font);
       margin-bottom: 5px;
     }
     
@@ -180,7 +188,8 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     }
     
     .login-form h2 {
-      color: var(--dark-text);
+      color: var(--heading-color);
+      font-family: var(--heading-font);
       font-weight: 700;
       margin-bottom: 10px;
       font-size: 1.8rem;
@@ -204,7 +213,7 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     .form-group label {
       display: block;
       margin-bottom: 8px;
-      color: var(--dark-text);
+      color: var(--heading-color);
       font-weight: 600;
       font-size: 0.9rem;
     }
