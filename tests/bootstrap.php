@@ -1,4 +1,5 @@
 <?php
+ob_start();
 /**
  * PHPUnit Bootstrap File
  * Inisialisasi environment untuk testing
