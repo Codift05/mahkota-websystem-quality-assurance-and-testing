@@ -1,7 +1,7 @@
 <?php
 // count_artikel.php - Menghitung jumlah artikel dalam database
 header('Content-Type: application/json');
-require_once '../db.php';
+require_once dirname(__DIR__) . '/db.php';
 
 // Menggunakan prepared statement untuk keamanan
 $sql = "SELECT COUNT(*) as count FROM artikel";

@@ -76,8 +76,12 @@ class TestHelper
      */
     public static function mockAdminSession()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+        // Pastikan session aktif agar $_SESSION tersedia di semua include
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+        if (!isset($_SESSION) || !is_array($_SESSION)) {
+            $_SESSION = [];
         }
         $_SESSION['is_admin'] = true;
         $_SESSION['username'] = 'test_admin';
@@ -89,7 +93,9 @@ class TestHelper
     public static function clearSession()
     {
         if (session_status() === PHP_SESSION_ACTIVE) {
-            session_destroy();
+            // Bersihkan isi session dan hancurkan
+            session_unset();
+            @session_destroy();
         }
         $_SESSION = [];
     }

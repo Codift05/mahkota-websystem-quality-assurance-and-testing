@@ -29,6 +29,13 @@ class DatabaseHelper
         if ($this->conn->connect_error) {
             throw new Exception('Database connection failed: ' . $this->conn->connect_error);
         }
+
+        // Pastikan koneksi menggunakan database test jika sudah ada
+        // Ini mencegah error "No database selected" saat instance baru dibuat di setUp()
+        // Database mungkin belum ada di bootstrap awal, namun akan dibuat di setupTestDatabase().
+        // Seleksi ini aman karena akan diulang lagi saat setupTestDatabase dipanggil.
+        @$this->conn->select_db($this->testDbName);
+        $this->conn->set_charset('utf8mb4');
     }
 
     /**

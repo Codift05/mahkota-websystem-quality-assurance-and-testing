@@ -1,7 +1,7 @@
 <?php
 // recent_activities.php - Menampilkan aktivitas terbaru dari database
 header('Content-Type: application/json');
-require_once '../db.php';
+require_once dirname(__DIR__) . '/db.php';
 
 // Mengambil aktivitas terbaru dari berbagai tabel
 $activities = [];
@@ -42,15 +42,7 @@ if ($result_media && $result_media->num_rows > 0) {
     }
 }
 
-// Mengurutkan semua aktivitas berdasarkan tanggal terbaru
-usort($activities, function($a, $b) {
-    return strtotime($b['date']) - strtotime($a['date']);
-});
-
-// Mengambil 10 aktivitas terbaru saja
-$activities = array_slice($activities, 0, 10);
-
-echo json_encode(['activities' => $activities]);
-
+// Gabungkan dan kirim sebagai JSON
+echo json_encode($activities);
 $conn->close();
 ?>

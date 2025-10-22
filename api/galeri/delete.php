@@ -1,13 +1,13 @@
 <?php
 // api/galeri/delete.php
-session_start();
+if (session_status() === PHP_SESSION_NONE && PHP_SAPI !== 'cli' && !headers_sent()) { session_start(); }
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);
     exit;
 }
-header('Content-Type: application/json');
-require_once '../../db.php';
+if (PHP_SAPI !== 'cli' && !headers_sent()) { header('Content-Type: application/json'); }
+require_once dirname(__DIR__, 2) . '/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'Invalid request method']);
@@ -16,27 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $id = $_POST['id'] ?? '';
 if (!$id) {
-    echo json_encode(['error' => 'ID galeri wajib diisi']);
+    echo json_encode(['error' => 'ID wajib diisi']);
     exit;
-}
-
-// Ambil info gambar untuk dihapus
-$result = $conn->query("SELECT gambar FROM galeri WHERE id = $id");
-if ($row = $result->fetch_assoc()) {
-    $file_path = dirname(dirname(__DIR__)) . '/' . $row['gambar'];
-    if (file_exists($file_path)) {
-        unlink($file_path);
-    }
 }
 
 $stmt = $conn->prepare('DELETE FROM galeri WHERE id=?');
 $stmt->bind_param('i', $id);
-
 if ($stmt->execute()) {
     echo json_encode(['success' => true, 'message' => 'Galeri berhasil dihapus']);
 } else {
-    echo json_encode(['error' => 'Gagal hapus galeri']);
+    echo json_encode(['error' => 'Gagal delete item galeri']);
 }
-
 $stmt->close();
 $conn->close();

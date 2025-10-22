@@ -357,68 +357,75 @@ if ($has_divisi) {
 
   </main>
 
-  <footer id="footer" class="footer dark-background">
-    <div class="container">
-      <div class="row gy-3">
-        <div class="col-lg-3 col-md-6 d-flex">
-          <i class="bi bi-geo-alt icon"></i>
-          <div class="address">
-            <h4>Alamat</h4>
-            <p>Manado, Sulawesi Utara</p>
-            <p>Indonesia</p>
+        <section id="contact" class="contact section">
+          <div class="container section-title">
+            <h2>Contact</h2>
           </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 d-flex">
-          <i class="bi bi-telephone icon"></i>
-          <div>
-            <h4>Kontak</h4>
-            <p>
-              <strong>Email:</strong> <span>info@mahkota.org</span><br>
-            </p>
+          <div class="col-lg-15 order-lg-2 order-1">
+            <div class="contact-sidebar">
+              <div class="contact-header">
+                <h3>Silahkan Hubungi<h3>
+                <p></p>
+              </div>
+              <div class="contact-methods">
+                <div class="contact-method">
+                  <div class="contact-icon">
+                    <i class="bi bi-geo-alt"></i>
+                  </div>
+                  <div class="contact-details">
+                    <span class="method-label">Alamat</span>
+                    <p>Asrama Babullah I<br>Jln Samrat 18, Kota Manado</p>
+                  </div>
+                </div>
+                <div class="contact-method">
+                  <div class="contact-icon">
+                    <i class="bi bi-envelope"></i>
+                  </div>
+                <div class="contact-method">
+                  <div class="contact-icon">
+                    <i class="bi bi-telephone"></i>
+                  </div>
+                  <div class="contact-details">
+                    <span class="method-label">Phone</span>
+                    <p>+62 85298524163</p>
+                  </div>
+                </div>
+                <div class="contact-method">
+                  <div class="contact-icon">
+                    <i class="bi bi-clock"></i>
+                  </div>
+                  <div class="contact-details">
+                    <span class="method-label">Waktu</span>
+                    <p>Senin - Minggu</p>
+                  </div>
+                </div>
+              </div>
+              <div class="connect-section">
+                <span class="connect-label">Connect with us</span>
+                <div class="social-links">
+                  <a href="#" class="social-link">
+                    <i class="bi bi-linkedin"></i>
+                  </a>
+                  <a href="#" class="social-link">
+                    <i class="bi bi-instagram"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 d-flex">
-          <i class="bi bi-clock icon"></i>
-          <div>
-            <h4>Jam Operasional</h4>
-            <p>
-              <strong>Senin-Jumat:</strong> <span>09:00 - 17:00</span><br>
-            </p>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <h4>Ikuti Kami</h4>
-          <div class="social-links d-flex">
-            <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-          </div>
-        </div>
+        </section>
       </div>
     </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Mahkota Insight</strong> <span>All Rights Reserved</span></p>
-    </div>
   </footer>
-
-  <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Preloader -->
   <div id="preloader"></div>
-
-  <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-
-  <!-- Main JS File -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/js/main.js"></script>
-
 </body>
-
 </html>

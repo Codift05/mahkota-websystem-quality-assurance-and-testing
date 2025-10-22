@@ -1,13 +1,13 @@
 <?php
 // api/artikel/create.php
-session_start();
+if (session_status() === PHP_SESSION_NONE && PHP_SAPI !== 'cli' && !headers_sent()) { session_start(); }
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);
     exit;
 }
-header('Content-Type: application/json');
-require_once '../../db.php';
+if (PHP_SAPI !== 'cli' && !headers_sent()) { header('Content-Type: application/json'); }
+require_once dirname(__DIR__, 2) . '/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'Invalid request method']);
@@ -40,7 +40,7 @@ if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
 $stmt = $conn->prepare('INSERT INTO artikel (judul, kategori, isi, gambar) VALUES (?, ?, ?, ?)');
 $stmt->bind_param('ssss', $judul, $kategori, $isi, $gambar);
 if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Artikel berhasil ditambahkan']);
+    echo json_encode(['success' => true, 'id' => $stmt->insert_id, 'message' => 'Artikel berhasil dibuat']);
 } else {
     echo json_encode(['error' => 'Gagal menambah artikel']);
 }

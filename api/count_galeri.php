@@ -1,7 +1,7 @@
 <?php
 // count_galeri.php - Menghitung jumlah galeri dalam database
 header('Content-Type: application/json');
-require_once '../db.php';
+require_once dirname(__DIR__) . '/db.php';
 
 // Menggunakan prepared statement untuk keamanan
 $sql = "SELECT COUNT(*) as count FROM galeri";

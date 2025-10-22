@@ -1,49 +1,35 @@
 <?php
 // api/program/read.php
-session_start();
+if (session_status() === PHP_SESSION_NONE && PHP_SAPI !== 'cli' && !headers_sent()) { session_start(); }
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);
     exit;
 }
-header('Content-Type: application/json');
-require_once '../../db.php';
+if (PHP_SAPI !== 'cli' && !headers_sent()) { header('Content-Type: application/json'); }
+require_once dirname(__DIR__, 2) . '/db.php';
 
-$tableCheck = $conn->query("SHOW TABLES LIKE 'program'");
-if (!$tableCheck || $tableCheck->num_rows === 0) {
-    echo json_encode([]);
-    $conn->close();
-    exit;
-}
-
-$bidang = $_GET['bidang'] ?? '';
 $status = $_GET['status'] ?? '';
+$field = $_GET['bidang'] ?? '';
 
-$sql = 'SELECT * FROM program WHERE 1=1';
+$query = 'SELECT * FROM program';
+$where = [];
 $params = [];
 $types = '';
 
-if ($bidang) {
-    $sql .= ' AND bidang = ?';
-    $params[] = $bidang;
-    $types .= 's';
-}
+if ($status) { $where[] = 'status = ?'; $params[] = $status; $types .= 's'; }
+if ($field) { $where[] = 'bidang = ?'; $params[] = $field; $types .= 's'; }
 
-if ($status) {
-    $sql .= ' AND status = ?';
-    $params[] = $status;
-    $types .= 's';
-}
-
-$sql .= ' ORDER BY tanggal_mulai DESC';
+if ($where) { $query .= ' WHERE ' . implode(' AND ', $where); }
+$query .= ' ORDER BY created_at DESC';
 
 if ($params) {
-    $stmt = $conn->prepare($sql);
+    $stmt = $conn->prepare($query);
     $stmt->bind_param($types, ...$params);
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $result = $conn->query($sql);
+    $result = $conn->query($query);
 }
 
 $programs = [];
@@ -54,4 +40,4 @@ if ($result) {
 }
 
 echo json_encode($programs);
-$conn->close();
+// Do not close $conn to allow multiple API calls in same process
