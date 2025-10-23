@@ -4,16 +4,18 @@ if (session_status() === PHP_SESSION_NONE && PHP_SAPI !== 'cli' && !headers_sent
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);
-    exit;
+    return;
 }
 if (PHP_SAPI !== 'cli' && !headers_sent()) { header('Content-Type: application/json'); }
 require_once dirname(__DIR__, 2) . '/db.php';
+// Import global connection when included inside function scope
+global $conn;
 
-$sql = 'SELECT * FROM galeri ORDER BY tanggal DESC';
+$sql = 'SELECT * FROM galeri ORDER BY tanggal DESC, id DESC';
 $result = $conn->query($sql);
 $items = [];
 while ($row = $result->fetch_assoc()) {
     $items[] = $row;
 }
 echo json_encode($items);
-$conn->close();
+// Do not close $conn to allow multiple API calls in same process

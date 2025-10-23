@@ -28,4 +28,7 @@ if ($conn->connect_error) {
 }
 // set charset
 $conn->set_charset('utf8mb4');
+
+// Expose in $GLOBALS so includes inside function scope can access via global
+$GLOBALS['conn'] = $conn;
 ?>

@@ -4,14 +4,16 @@ if (session_status() === PHP_SESSION_NONE && PHP_SAPI !== 'cli' && !headers_sent
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);
-    exit;
+    return;
 }
 if (PHP_SAPI !== 'cli' && !headers_sent()) { header('Content-Type: application/json'); }
 require_once dirname(__DIR__, 2) . '/db.php';
+// Import global connection when included inside function scope
+global $conn;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'Invalid request method']);
-    exit;
+    return;
 }
 
 $id = $_POST['id'] ?? '';
@@ -21,7 +23,7 @@ $gambar = '';
 
 if (!$id || !$judul || !$kategori) {
     echo json_encode(['error' => 'ID, judul, dan kategori wajib diisi']);
-    exit;
+    return;
 }
 
 if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
@@ -49,4 +51,4 @@ if ($stmt->execute()) {
     echo json_encode(['error' => 'Gagal update item galeri']);
 }
 $stmt->close();
-$conn->close();
+// Do not close $conn to allow multiple API calls in same process

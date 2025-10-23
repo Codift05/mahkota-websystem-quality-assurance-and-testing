@@ -4,14 +4,16 @@ if (session_status() === PHP_SESSION_NONE && PHP_SAPI !== 'cli' && !headers_sent
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     http_response_code(403);
     echo json_encode(['error' => 'Unauthorized']);
-    exit;
+    return;
 }
 if (PHP_SAPI !== 'cli' && !headers_sent()) { header('Content-Type: application/json'); }
 require_once dirname(__DIR__, 2) . '/db.php';
+// Import global connection when included inside function scope
+global $conn;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'Invalid request method']);
-    exit;
+    return;
 }
 
 $judul = $_POST['judul'] ?? '';
@@ -21,7 +23,7 @@ $tanggal = date('Y-m-d H:i:s');
 
 if (!$judul || !$kategori) {
     echo json_encode(['error' => 'Judul dan kategori wajib diisi']);
-    exit;
+    return;
 }
 
 if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
@@ -35,6 +37,12 @@ if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
+// Require image upload
+if ($gambar === '') {
+    echo json_encode(['error' => 'Gambar wajib diupload']);
+    return;
+}
+
 $stmt = $conn->prepare('INSERT INTO galeri (judul, kategori, gambar, tanggal) VALUES (?, ?, ?, ?)');
 $stmt->bind_param('ssss', $judul, $kategori, $gambar, $tanggal);
 if ($stmt->execute()) {
@@ -43,4 +51,4 @@ if ($stmt->execute()) {
     echo json_encode(['error' => 'Gagal menambah item galeri']);
 }
 $stmt->close();
-$conn->close();
+// Do not close $conn to allow multiple API calls in same process
